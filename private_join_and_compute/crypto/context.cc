@@ -143,7 +143,7 @@ BigNum Context::RandomOracleSha256(absl::string_view x,
 
 BigNum Context::PRF(absl::string_view key, absl::string_view data,
                     const BigNum& max_value) {
-  CHECK_GE(key.size() * 8, 80);
+  CHECK_GE(key.size() * 8, 80u);
   CHECK_LE(max_value.BitLength(), 512)
       << "The requested output length is not supported. The maximum "
          "supported output length is 512. The requested output length is "

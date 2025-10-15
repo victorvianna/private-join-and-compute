@@ -16,6 +16,7 @@
 #ifndef PRIVATE_JOIN_AND_COMPUTE_INTERNAL_UTIL_FILE_H_
 #define PRIVATE_JOIN_AND_COMPUTE_INTERNAL_UTIL_FILE_H_
 
+#include <initializer_list>
 #include <string>
 
 #include "absl/strings/string_view.h"
@@ -89,24 +90,21 @@ class File {
 };
 
 namespace internal {
-std::string JoinPathImpl(std::initializer_list<std::string> paths);
+std::string JoinPathImpl(std::initializer_list<absl::string_view> paths);
 }  // namespace internal
 
-// Joins multiple paths together such that only the first argument directory
-// structure is represented. A dot as a separator is added for other arguments.
+// Joins multiple paths together.
 //
 //  Arguments                  | JoinPath            |
 //  ---------------------------+---------------------+
 //  '/foo', 'bar'              | /foo/bar            |
 //  '/foo/', 'bar'             | /foo/bar            |
 //  '/foo', '/bar'             | /foo/bar            |
-//  '/foo', '/bar', '/baz'     | /foo/bar.baz        |
+//  '/foo', '/bar', '/baz'     | /foo/bar/baz        |
 //
 // All paths will be treated as relative paths, regardless of whether or not
 // they start with a leading '/'. That is, all paths will be concatenated
 // together, with the appropriate path separator inserted in between.
-// After the first path, all paths will be joined with a dot instead of the path
-// separator so that there is no level of directory after the first argument.
 // Arguments must be convertible to string.
 //
 // Usage:

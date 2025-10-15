@@ -17,8 +17,13 @@
 
 #include "private_join_and_compute/util/file.h"
 
+#include <cstddef>
+#include <cstring>
+#include <initializer_list>
 #include <sstream>
 #include <string>
+
+#include "absl/strings/string_view.h"
 
 namespace private_join_and_compute {
 namespace internal {
@@ -34,43 +39,36 @@ bool EndsWithSlash(absl::string_view path) {
 
 }  // namespace
 
-std::string JoinPathImpl(std::initializer_list<std::string> paths) {
-  std::string joined_path;
-  int size = paths.size();
+std::string JoinPathImpl(std::initializer_list<absl::string_view> paths) {
+  std::string result;
 
-  int counter = 1;
-  for (auto it = paths.begin(); it != paths.end(); ++it, ++counter) {
-    std::string path = *it;
-    if (path.empty()) {
-      continue;
-    }
+  if (paths.size() != 0) {
+    // This size calculation is worst-case: it assumes one extra "/" for every
+    // path other than the first.
+    size_t total_size = paths.size() - 1;
+    for (const absl::string_view path : paths) total_size += path.size();
+    result.resize(total_size);
 
-    if (it == paths.begin()) {
-      joined_path += path;
-      if (!EndsWithSlash(path)) {
-        joined_path += "/";
-      }
-      continue;
-    }
-
-    if (EndsWithSlash(path)) {
-      if (IsAbsolutePath(path)) {
-        joined_path += path.substr(1, path.size() - 2);
+    auto begin = result.begin();
+    auto out = begin;
+    bool trailing_slash = false;
+    for (absl::string_view path : paths) {
+      if (path.empty()) continue;
+      if (path.front() == '/') {
+        if (trailing_slash) {
+          path.remove_prefix(1);
+        }
       } else {
-        joined_path += path.substr(0, path.size() - 1);
+        if (!trailing_slash && out != begin) *out++ = '/';
       }
-    } else {
-      if (IsAbsolutePath(path)) {
-        joined_path += path.substr(1);
-      } else {
-        joined_path += path;
-      }
+      const size_t this_size = path.size();
+      memcpy(&*out, path.data(), this_size);
+      out += this_size;
+      trailing_slash = out[-1] == '/';
     }
-    if (counter != size) {
-      joined_path += ".";
-    }
+    result.erase(out - begin);
   }
-  return joined_path;
+  return result;
 }
 
 }  // namespace internal

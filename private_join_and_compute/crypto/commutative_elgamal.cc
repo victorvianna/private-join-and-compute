@@ -47,7 +47,7 @@ CommutativeElGamal::CommutativeElGamal(
 
 StatusOr<std::unique_ptr<CommutativeElGamal>>
 CommutativeElGamal::CreateWithNewKeyPair(int curve_id) {
-  std::unique_ptr<Context> context(new Context);
+  std::unique_ptr<Context> context = std::make_unique<Context>();
   PJC_ASSIGN_OR_RETURN(ECGroup group, ECGroup::Create(curve_id, context.get()));
   PJC_ASSIGN_OR_RETURN(auto key_pair, elgamal::GenerateKeyPair(group));
   std::unique_ptr<CommutativeElGamal> result(new CommutativeElGamal(
@@ -59,7 +59,7 @@ CommutativeElGamal::CreateWithNewKeyPair(int curve_id) {
 StatusOr<std::unique_ptr<CommutativeElGamal>>
 CommutativeElGamal::CreateFromPublicKey(
     int curve_id, const std::pair<std::string, std::string>& public_key_bytes) {
-  std::unique_ptr<Context> context(new Context);
+  std::unique_ptr<Context> context = std::make_unique<Context>();
   PJC_ASSIGN_OR_RETURN(ECGroup group, ECGroup::Create(curve_id, context.get()));
 
   PJC_ASSIGN_OR_RETURN(ECPoint g, group.CreateECPoint(public_key_bytes.first));
@@ -76,7 +76,7 @@ StatusOr<std::unique_ptr<CommutativeElGamal>>
 CommutativeElGamal::CreateFromPublicAndPrivateKeys(
     int curve_id, const std::pair<std::string, std::string>& public_key_bytes,
     absl::string_view private_key_bytes) {
-  std::unique_ptr<Context> context(new Context);
+  std::unique_ptr<Context> context = std::make_unique<Context>();
   PJC_ASSIGN_OR_RETURN(ECGroup group, ECGroup::Create(curve_id, context.get()));
 
   PJC_ASSIGN_OR_RETURN(ECPoint g, group.CreateECPoint(public_key_bytes.first));

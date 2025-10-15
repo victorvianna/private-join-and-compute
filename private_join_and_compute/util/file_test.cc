@@ -119,13 +119,13 @@ TEST_F(FileTest, TestDelete) {
 }
 
 TEST_F(FileTest, JoinPathWithMultipleArgs) {
-  std::string ret = JoinPath("/tmp", "foo", "bar/", "/baz/");
-  EXPECT_EQ("/tmp/foo.bar.baz", ret);
+  std::string ret = JoinPath("/tmp", "foo", "bar/", "/baz");
+  EXPECT_EQ("/tmp/foo/bar/baz", ret);
 }
 
 TEST_F(FileTest, JoinPathWithMultipleArgsStartingWithEndSlashDir) {
   std::string ret = JoinPath("/tmp/", "foo", "bar/", "/baz/");
-  EXPECT_EQ("/tmp/foo.bar.baz", ret);
+  EXPECT_EQ("/tmp/foo/bar/baz/", ret);
 }
 
 TEST_F(FileTest, ReadLineWithCarriageReturnsTest) {

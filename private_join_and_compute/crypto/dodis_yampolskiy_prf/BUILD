@@ -68,11 +68,9 @@ cc_test(
         "//private_join_and_compute/crypto:bn_util",
         "//private_join_and_compute/crypto:ec_util",
         "//private_join_and_compute/crypto:pedersen_over_zn",
-        "//private_join_and_compute/crypto/proto:big_num_cc_proto",
         "//private_join_and_compute/crypto/proto:pedersen_cc_proto",
         "//private_join_and_compute/crypto/proto:proto_util",
         "//private_join_and_compute/util:status_testing_includes",
-        "@abseil-cpp//absl/strings",
         "@googletest//:gtest_main",
     ],
 )
@@ -134,7 +132,6 @@ cc_test(
         "//private_join_and_compute/crypto/proto:pedersen_cc_proto",
         "//private_join_and_compute/crypto/proto:proto_util",
         "//private_join_and_compute/util:status_testing_includes",
-        "@abseil-cpp//absl/strings",
         "@googletest//:gtest_main",
     ],
 )

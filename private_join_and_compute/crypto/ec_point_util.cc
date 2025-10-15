@@ -33,7 +33,7 @@ ECPointUtil::ECPointUtil(std::unique_ptr<Context> context, ECGroup group)
     : context_(std::move(context)), group_(std::move(group)) {}
 
 StatusOr<std::unique_ptr<ECPointUtil>> ECPointUtil::Create(int curve_id) {
-  std::unique_ptr<Context> context(new Context());
+  std::unique_ptr<Context> context = std::make_unique<Context>();
   PJC_ASSIGN_OR_RETURN(ECGroup group, ECGroup::Create(curve_id, context.get()));
   return std::unique_ptr<ECPointUtil>(
       new ECPointUtil(std::move(context), std::move(group)));
