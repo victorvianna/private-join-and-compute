@@ -37,6 +37,8 @@
 #include "private_join_and_compute/crypto/proto/camenisch_shoup.pb.h"
 #include "private_join_and_compute/crypto/proto/ec_point.pb.h"
 #include "private_join_and_compute/crypto/proto/proto_util.h"
+#include "src/google/protobuf/io/coded_stream.h"
+#include "src/google/protobuf/io/zero_copy_stream_impl_lite.h"
 
 namespace private_join_and_compute {
 
